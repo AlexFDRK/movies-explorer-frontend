@@ -1,0 +1,15 @@
+.login__middle {
+  height: 266px;
+}
+
+@media screen and (max-width: 868px) {
+  .login__middle {
+    height: 266px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .login__middle {
+    height: 266px;
+  }
+}

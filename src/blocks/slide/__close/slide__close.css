@@ -1,0 +1,28 @@
+.slide__close{
+    border: none;
+    outline: none;
+    position: absolute;
+    top: 22.44px;
+    right: 22.44px;
+    margin: 0;
+    width: 32px;
+    height: 32px;
+    background-image: url("../../../images/close_btn.svg");
+    background-size: cover;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 767px){
+    .slide__close{
+        top: 13.44px;
+        right: 13.44px;
+    }
+}
+
+.slide__close:hover{
+    opacity: 60%;
+    transform: rotate(360deg);
+    transition: 0.5s;
+}

@@ -1,0 +1,25 @@
+.student__frame {
+    margin: 66px 0 0 0;
+    height: 327px;
+    width: 270px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  @media screen and (max-width: 868px) {
+    .student__frame {
+      margin-top: 66px;
+      height: 307px;
+      width: 255px;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    .student__frame {
+      margin-top: 60px;
+      height: 352px;
+      width: 292px;
+    }
+  }
+  

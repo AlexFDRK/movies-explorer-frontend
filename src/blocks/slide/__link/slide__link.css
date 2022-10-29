@@ -1,0 +1,7 @@
+.slide__link {
+  cursor: pointer;
+}
+
+.slide__link:hover {
+  border-bottom: 2px solid black;
+}

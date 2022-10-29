@@ -1,0 +1,20 @@
+.student__text {
+  margin: 26px 49px 0 0;
+  max-width: 600px;
+}
+
+@media screen and (max-width: 868px) {
+  .student__text {
+    margin-top: 20px;
+    min-width: 364px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .student__text {
+    max-width: 100%;
+    margin-left: 0;
+    /* min-width: 292px; */
+    min-width: auto;
+  }
+}
