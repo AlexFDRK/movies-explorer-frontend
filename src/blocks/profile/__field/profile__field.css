@@ -1,0 +1,8 @@
+.profile__field {
+  border: none;
+  text-align: right;
+}
+
+.profile__field:focus {
+  outline: none;
+}

@@ -1,0 +1,23 @@
+.header__menu-text {
+  list-style-type: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0em; 
+}
+
+@media screen and (max-width: 868px) {
+  .header__menu-text {
+    margin-bottom: 28px;
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header__menu-text {
+    margin-bottom: 24px;
+  }
+}

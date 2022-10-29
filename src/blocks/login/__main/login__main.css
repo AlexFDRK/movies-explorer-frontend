@@ -1,0 +1,11 @@
+.login__main{
+    max-width: 396px;
+    min-width: 260px;
+    margin: 0 auto 0 auto;
+}
+
+@media screen and (max-width: 767px) {
+    .login__main{
+        max-width: 260px;
+    }
+}

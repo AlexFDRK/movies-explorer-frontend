@@ -1,0 +1,15 @@
+.movies__short {
+  margin-right: 14px;
+  position: relative;
+  border: none;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 800px) {
+  .movies__short {
+    margin-right: 0;
+    margin-left: 16px;
+  }
+}

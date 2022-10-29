@@ -1,0 +1,12 @@
+.about__long-bar {
+  background: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media screen and (max-width: 400px) {
+  .about__long-bar {
+    height: 35px;
+  }
+}

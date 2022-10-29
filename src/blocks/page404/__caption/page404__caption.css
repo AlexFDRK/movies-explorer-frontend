@@ -1,0 +1,21 @@
+.page404__caption {
+  margin-top: 246px;
+  font-size: 140px;
+  font-weight: 400;
+  line-height: 169px;
+}
+
+@media screen and (max-width: 868px) {
+  .page404__caption {
+    margin-top: 408px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .page404__caption {
+    margin-top: 329px;
+    font-size: 80px;
+    font-weight: 400;
+    line-height: 97px;
+  }
+}
