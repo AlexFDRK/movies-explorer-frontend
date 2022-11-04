@@ -12,7 +12,7 @@ const Student = ({ studentBlock }) => {
       window.open('https://alexfdrk.github.io/mesto/index.html', '_blank')
         .focus;
     } else if (value === 'single') {
-      window.open('https://alexfdrk.github.io/project1/index.html', '_blank')
+      window.open('https://alexfdrk.github.io/first-project/', '_blank')
         .focus;
     }
   };
