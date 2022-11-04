@@ -1,0 +1,24 @@
+.header__navigation {
+  list-style-type: none;
+  width: 230px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 868px) {
+  .header__navigation {
+    margin-top: 159px;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .header__navigation {
+    margin-top: 144px;
+    flex-direction: column;
+  }
+}
