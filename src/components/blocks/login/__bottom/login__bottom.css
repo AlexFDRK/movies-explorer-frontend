@@ -1,0 +1,15 @@
+.login__bottom {
+  height: 768px;
+}
+
+@media screen and (max-width: 868px) {
+  .login__bottom {
+    height: 379px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .login__bottom {
+    height: 327px;
+  }
+}

@@ -1,0 +1,29 @@
+.header__burger {
+  margin: 0 70px 0 0;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  display: none;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 868px) {
+  .header__burger {
+    margin: 0 70px 0 0;
+    display: inline;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .header__burger {
+    margin: 0 30px 0 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .header__burger {
+    margin: 0 14px 0 0;
+    width: 40px;
+    height: 43px;
+  }
+}

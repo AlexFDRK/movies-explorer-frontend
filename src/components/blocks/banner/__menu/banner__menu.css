@@ -1,0 +1,25 @@
+.banner__menu {
+  margin: auto 70px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 183px;
+}
+
+@media screen and (max-width: 868px) {
+  .banner__menu {
+    margin: auto 30px auto 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .banner__menu {
+    margin: auto 14px auto 0;
+  }
+
+  @media screen and (max-width: 400px) {
+    .banner__menu {
+      width: 132px;
+    }
+  }
+}

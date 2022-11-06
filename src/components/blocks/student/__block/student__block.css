@@ -1,0 +1,6 @@
+.student__block {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  cursor: pointer;
+}

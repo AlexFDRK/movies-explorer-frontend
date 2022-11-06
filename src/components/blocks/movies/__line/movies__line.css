@@ -1,0 +1,14 @@
+.movies__line {
+  margin: 0;
+  padding: 0;
+  background-color: #e8e8e8;
+  color: #e8e8e8;
+  height: 1px;
+  border: none;
+}
+
+@media screen and (max-width: 400px) {
+  .movies__line {
+    margin-top: -5px;
+  }
+}

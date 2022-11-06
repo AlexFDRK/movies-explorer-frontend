@@ -1,0 +1,26 @@
+.tech__footer {
+  margin: 100px 0 0 0;
+  padding: 0;
+  width: 690px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 868px) {
+  .tech__footer {
+    margin-top: 83px;
+    width: 648px;
+    height: 57px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .tech__footer {
+    gap: 10px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+    width: 178px;
+    height: 258px;
+  }
+}

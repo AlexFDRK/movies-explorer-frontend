@@ -1,0 +1,22 @@
+.promo-footer__description {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+  color: #a0a0a0;
+}
+
+@media screen and (max-width: 800px) {
+  .promo-footer__description {
+    margin: -5px;
+    font-size: 13px;
+    line-height: 15.75px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .promo-footer__description {
+    margin: 0px;
+  }
+}
