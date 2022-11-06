@@ -7,11 +7,19 @@
 @media screen and (max-width: 868px) {
   .tech__title {
     margin-top: 80px;
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 58px;
+    letter-spacing: -0.04em;
   }
 }
 
 @media screen and (max-width: 767px) {
   .tech__title {
     margin-top: 60px;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+    letter-spacing: -0.04em;
   }
 }

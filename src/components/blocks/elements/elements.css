@@ -23,6 +23,12 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .elements {
+    grid-gap: 20px;
+  }
+}
+
 @media screen and (max-width: 400px) {
   .elements {
     margin-top: 40px;

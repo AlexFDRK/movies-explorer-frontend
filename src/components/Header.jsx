@@ -25,7 +25,7 @@ const Header = ({ isItHidden, click }) => {
           <Link to='/movies' className='header__menu-text link color_black'>
             Фильмы
           </Link>
-          <Link to='/movies' className='header__menu-text link color_black'>
+          <Link to='/saved-movies' className='header__menu-text link color_black'>
             Сохранённые фильмы
           </Link>
         </nav>

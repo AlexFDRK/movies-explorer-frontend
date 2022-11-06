@@ -15,7 +15,7 @@ import { movies } from '../utils/constants';
 function App() {
   const history = useHistory();
   const [error, setError] = useState('');
-  const [sliderVisible, setSliderVisible] = useState(true);
+  const [sliderVisible, setSliderVisible] = useState(false);
   const [moviesTurn, setMoviesTurn] = useState(1);
   const [loadMovies, setLoadMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
@@ -96,6 +96,10 @@ function App() {
     return minFlag && maxFlag;
   };
 
+  const findFilmSubmit = (film) => {
+    console.log(film);
+  };
+
   return (
     <div className='App'>
       <div className='page'>
@@ -125,10 +129,15 @@ function App() {
               movies={loadMovies}
               click={clickBurger}
               makeTurnClick={makeTurnClick}
+              findFilmSubmit={findFilmSubmit}
             />
           </Route>
           <Route path='/saved-movies'>
-            <Movies movies={savedMovies} click={clickBurger} />
+            <Movies
+              movies={savedMovies}
+              click={clickBurger}
+              findFilmSubmit={findFilmSubmit}
+            />
           </Route>
           <Route path='/404'>
             <Page404 />

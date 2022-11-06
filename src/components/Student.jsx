@@ -12,8 +12,9 @@ const Student = ({ studentBlock }) => {
       window.open('https://alexfdrk.github.io/mesto/index.html', '_blank')
         .focus;
     } else if (value === 'single') {
-      window.open('https://alexfdrk.github.io/first-project/', '_blank')
-        .focus;
+      window.open('https://alexfdrk.github.io/first-project/', '_blank').focus;
+    } else if (value === 'git') {
+      window.open('https://github.com/AlexFDRK', '_blank').focus;
     }
   };
 
@@ -32,7 +33,7 @@ const Student = ({ studentBlock }) => {
             Ненавижу войну. Если придется уехать из страны, нужны знания в
             чём-то менее специфическом, напрмер в веб-разработке.
           </p>
-          <div className='student__git'>Github</div>
+          <div className='student__git link' onClick={() => goToStatSite('git')}>Github</div>
         </div>
         <div className='student__frame'>
           <img className='student__photo' src={mePath} alt='Фото' />
@@ -41,34 +42,28 @@ const Student = ({ studentBlock }) => {
       <div className='student__portfolio'>
         <div className='student__grey-header'>Портфолио</div>
         <ul className='student__list'>
-          <li className='student__block'>
+          <li
+            className='student__block link'
+            onClick={() => goToStatSite('travel')}
+          >
             <div className='student__work'>Статичный сайт</div>
-            <img
-              className='student__arrow link'
-              src={arrowPath}
-              alt='стрелка'
-              onClick={() => goToStatSite('travel')}
-            />
+            <img className='student__arrow' src={arrowPath} alt='стрелка' />
+            <hr className='line student__line' />
           </li>
-          <hr className='line student__line' />
-          <li className='student__block'>
+          <li
+            className='student__block link'
+            onClick={() => goToStatSite('adopt')}
+          >
             <div className='student__work'>Адаптивный сайт</div>
-            <img
-              className='student__arrow link'
-              src={arrowPath}
-              alt='стрелка'
-              onClick={() => goToStatSite('adopt')}
-            />
+            <img className='student__arrow' src={arrowPath} alt='стрелка' />
+            <hr className='line student__line' />
           </li>
-          <hr className='line student__line' />
-          <li className='student__block'>
+          <li
+            className='student__block link'
+            onClick={() => goToStatSite('single')}
+          >
             <div className='student__work'>Одностраничное приложение</div>
-            <img
-              className='student__arrow link'
-              src={arrowPath}
-              alt='стрелка'
-              onClick={() => goToStatSite('single')}
-            />
+            <img className='student__arrow' src={arrowPath} alt='стрелка' />
           </li>
         </ul>
       </div>

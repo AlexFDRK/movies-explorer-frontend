@@ -14,8 +14,9 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 800px) {
   .movies__button {
+    margin-bottom: 90px;
     width: 240px;
     font-size: 12px;
     font-weight: 500;

@@ -7,10 +7,12 @@
   line-height: 34px;
   letter-spacing: 0px;
   border: none;
+  max-width: 280px;
 }
 
 @media screen and (max-width: 400px) {
   .movies__title {
+    max-width: 200px;
     font-size: 18px;
     font-weight: 500;
     line-height: 22px;

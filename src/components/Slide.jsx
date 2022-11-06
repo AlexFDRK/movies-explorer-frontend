@@ -14,9 +14,9 @@ const Slide = ({ isSliderVisible, clickSlider }) => {
   return (
     <section>
       <div
-        className={`slide__dim ${isSliderVisible ? '' : 'slide__dim_on'}`}
+        className={`slide__dim ${isSliderVisible ? 'slide__dim_on' : ''}`}
       ></div>
-      <div className={`slide ${isSliderVisible ? 'slide__move_on' : ''}`}>
+      <nav className={`slide ${isSliderVisible ? 'slide__move_on' : ''}`}>
         <button
           type='button'
           className='slide__close'
@@ -49,15 +49,15 @@ const Slide = ({ isSliderVisible, clickSlider }) => {
             Сохранённые фильмы
           </li>
         </ul>
-        <ul className='header__account'>
-          <li
+        <div className='header__account'>
+          <div
             className='header__caption slide__link last'
             onClick={() => {
               handleProfileClick('/profile');
             }}
           >
             Аккаунт
-          </li>
+          </div>
           <button
             type='button'
             className='header__button'
@@ -67,8 +67,8 @@ const Slide = ({ isSliderVisible, clickSlider }) => {
           >
             <img className='header__pic' src={profilePic} alt='Профиль' />
           </button>
-        </ul>
-      </div>
+        </div>
+      </nav>
     </section>
   );
 };

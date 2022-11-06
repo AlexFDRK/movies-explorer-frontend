@@ -27,7 +27,7 @@ const LogForm = ({
   useEffect(() => {
     let errorFound = false;
     let count = 0;
-    let tmpMessage = 'Ошибка требуемого формата в :';
+    let tmpMessage = 'Ошибка формата в :';
 
     if (!validateName && !areTwoFields) {
       tmpMessage = tmpMessage + 'Имени';

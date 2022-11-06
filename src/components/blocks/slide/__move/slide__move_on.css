@@ -1,3 +1,5 @@
 .slide__move_on {
-  transform: translateX(100%);
+  visibility: visible;
+  transition: all 1s ease-out;
+  transform: translateX(-100%);
 }

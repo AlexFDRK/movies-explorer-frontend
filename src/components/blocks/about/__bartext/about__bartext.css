@@ -7,10 +7,9 @@
 
 @media screen and (max-width: 868px) {
   .about__bartext {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 15px;
-    letter-spacing: -0.04em;
+    line-height: 17px;
   }
 }
 
