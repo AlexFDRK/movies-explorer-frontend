@@ -1,28 +1,42 @@
+///*eslint-disable*/
 import '../index.css';
-import Card from './Card';
-import findPic from '../images/find.svg';
 import React from 'react';
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const Body = ({ movies, makeTurnClick, findFilmSubmit }) => {
+import Card from './Card';
+import findPic from '../images/find.svg';
+import Preloader from './Preloader';
+
+const Body = ({
+  // makeTurnClick,
+  localMovies,
+  // savedMoviesId,
+  showPreloader,
+  handleFilmSubmit,
+  likeMovieClick,
+}) => {
   const location = useLocation();
+  const [filterText, setFilterText] = useState('');
   const [short, setShort] = useState(false);
-  const [btnVisible, setBtnVisible] = useState(false);
-  const [film, setFilm] = useState('');
+  // const [btnVisible, setBtnVisible] = useState(false);
+  
+  useEffect(() => {
+    console.log(localMovies);
+  }, [localMovies]);
 
   useEffect(() => {
-    setBtnVisible(makeTurnClick === undefined ? false : true);
-  }, []);
+    console.log('text was changed');
+    // setBtnVisible(makeTurnClick === undefined ? false : true);
+  }, [filterText]);
 
   useEffect(() => {
     switch (location.pathname) {
       case '/movies':
-        setBtnVisible(true);
+        // setBtnVisible(true);
         break;
       case '/saved-movies':
-        setBtnVisible(false);
+        // setBtnVisible(false);
         break;
       default:
         break;
@@ -34,32 +48,52 @@ const Body = ({ movies, makeTurnClick, findFilmSubmit }) => {
   };
 
   const handleFilmChange = (e) => {
-    setFilm(e.target.value);
+    setFilterText(e.target.value);
   };
 
-  function handleSubmit(e) {
+  const getText = React.useCallback(() => {
+    return filterText;
+  },[filterText]);
+
+  const getShort = React.useCallback(() => {
+    return short;
+  },[short]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!film) {
+    if (!filterText) {
       return;
     }
 
-    findFilmSubmit(film);
-  }
+    handleFilmSubmit(filterText, short);
+  };
 
-  let i = 1;
+  const filteredArr = () => {
+    return localMovies.filter(
+      (value) =>
+        value.nameRU.toLowerCase().includes(filterText.toLowerCase()) &&
+        (short ? value.duration < 40 : true)
+    );
+  };
 
   return (
     <main className='movies__body'>
-      <form className='movies__top' onSubmit={handleSubmit}>
+      {/* <form className='movies__top' onSubmit={handleSubmit}> */}
+      <form className='movies__top'>
         <input
           className='movies__title'
           required
           placeholder='Фильм'
+          value={getText() || ''}
           type='string'
           onChange={handleFilmChange}
         />
-        <button type='submit' className='movies__search link'>
+        <button
+          type='submit'
+          className='movies__search link'
+          onClick={handleSubmit}
+        >
           <img className='movies__find' src={findPic} alt='поиск' />
         </button>
       </form>
@@ -67,7 +101,7 @@ const Body = ({ movies, makeTurnClick, findFilmSubmit }) => {
       <div className='movies__group'>
         <div
           className={`movies__short ${
-            short ? 'movies__short_on' : 'movies__short_off'
+            getShort() ? 'movies__short_on' : 'movies__short_off'
           }`}
           aria-label='Короткометражки'
           onClick={clickShort}
@@ -80,22 +114,33 @@ const Body = ({ movies, makeTurnClick, findFilmSubmit }) => {
         </div>
         <span>Короткометражки</span>
       </div>
-      <div className='elements'>
-        {movies.map((item) => (
-          <Card card={item} key={i++} />
-        ))}
-      </div>
-      <button
-        type='button'
-        className={`movies__button ${
-          btnVisible ? '' : 'movies__button_hidden'
-        }`}
-        onClick={makeTurnClick}
-      >
-        Ещё
-      </button>
+      {showPreloader && localMovies.length === 0 ? (
+        <Preloader />
+      ) : (
+        <div>
+          <div className='elements'>
+            {filteredArr().map((item) => (
+              <Card
+                card={item}
+                key={item.id}
+                likeMovieClick={likeMovieClick}
+                // isLiked={savedMoviesId.includes(item.id)}
+              />
+            ))}
+          </div>
+          {/* <button
+            type='button'
+            className={`movies__button ${
+              btnVisible ? '' : 'movies__button_hidden'
+            }`}
+            onClick={makeTurnClick}
+          >
+            Ещё
+          </button> */}
+        </div>
+      )}
     </main>
   );
 };
 
-export default Body;
+export default React.memo(Body);

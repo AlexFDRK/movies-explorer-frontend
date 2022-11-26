@@ -3,7 +3,8 @@
     height: 327px;
     width: 270px;
     border-radius: 10px;
-    overflow: hidden;
+    background-size: cover;
+    /* overflow: hidden; */
     flex-shrink: 0;
   }
   

@@ -3,13 +3,14 @@ import LogForm from '../components/LogForm';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const Login = ({ validateFunction, onSubmit }) => {
+const Login = ({ setSubmitErrorText, submitErrorText, onSubmit }) => {
   return (
     <LogForm
       caption='Рады видеть!'
       isItMissing='none'
       btnText='Войти'
-      validateFunction={validateFunction}
+      setSubmitErrorText={setSubmitErrorText}
+      submitErrorText={submitErrorText}
       onSubmit={onSubmit}
     >
       <div className='login__text_grey'>Ещё не зарегистрированы?</div>

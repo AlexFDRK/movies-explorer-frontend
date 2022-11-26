@@ -1,0 +1,9 @@
+.login__button_status_inactive {
+  /* color: black;
+    border: solid 1px black;
+    background: white; */
+  pointer-events: none;
+  user-select: none;
+  transition: 0.3s;
+  opacity: 0.4;
+}

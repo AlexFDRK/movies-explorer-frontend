@@ -1,10 +1,12 @@
 import '../index.css';
 import React from 'react';
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-const ProfileMain = () => {
+const ProfileMain = ({ handleExitClick }) => {
+  const currentContextData = useContext(CurrentUserContext);
+  const currentUser = currentContextData.currentUser;
   const [editable, setEditable] = useState(false);
   const handleEditClick = () => {
     setEditable(!editable);
@@ -12,13 +14,13 @@ const ProfileMain = () => {
 
   return (
     <main className='profile'>
-      <h2 className='text_caption profile__caption'>Привет, Виталий!</h2>
+      <h2 className='text_caption profile__caption'>Привет, {currentUser.name}!</h2>
       <div className='profile__main'>
         <div className='profile__group'>
           <span className='profile__text'>Имя</span>
           <input
             className='profile__text profile__field'
-            placeholder='Виталий'
+            value={currentUser.name || ''}
             readOnly={editable ? '' : 'readonly'}
             type='string'
           />
@@ -28,19 +30,19 @@ const ProfileMain = () => {
           <span className='profile__text'>E-mail</span>
           <input
             className='profile__text profile__field'
-            placeholder='pochta@yandex.ru'
+            value={currentUser.email || ''}
             readOnly={editable ? '' : 'readonly'}
             type='string'
           />
         </div>
       </div>
       <div className='profile__footer'>
-        <li className='link profile__link' onClick={handleEditClick}>
+        <div className='link profile__link' onClick={handleEditClick}>
           Редактировать
-        </li>
-        <Link to='/signup' className='link profile__link color_red'>
+        </div>
+        <div className='link profile__link color_red' onClick={handleExitClick}>
           Выйти из аккаунта
-        </Link>
+        </div>
       </div>
     </main>
   );

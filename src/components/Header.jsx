@@ -13,7 +13,8 @@ const Header = ({ isItHidden, click }) => {
     history.push('/');
   };
 
-  const handleClick = () => {
+  const handleClick = (event) => {
+    event.preventDefault()
     click();
   };
 
