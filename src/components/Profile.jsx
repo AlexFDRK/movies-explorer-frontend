@@ -4,11 +4,11 @@ import React from 'react';
 import Header from '../components/Header';
 import ProfileMain from '../components/ProfileMain';
 
-const Profile = ({ click }) => {
+const Profile = ({ handleExitClick, click }) => {
   return (
     <div>
       <Header click={click} />
-      <ProfileMain />
+      <ProfileMain handleExitClick={handleExitClick} />
     </div>
   );
 };

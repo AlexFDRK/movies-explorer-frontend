@@ -1,25 +1,59 @@
+/* eslint-disable */
 import '../index.css';
 import React from 'react';
-// import Preloader from './Preloader';
+import { MOMOREPARTIES } from '../utils/constants';
+// import { useEffect } from 'react';
 
-const Card = ({ card }) => {
+const Card = ({ card, likeMovieClick, isLiked, itSavedFilms }) => {
+  // React.useEffect(() => {
+  //   console.log(itSaved);
+  //   console.log(card.id);
+  //   console.log(isLiked);
+  // }, []);
+
+  function stringTime(duration) {
+    const h = Math.floor(duration / 60);
+    const m = duration - h * 60;
+
+    return h === 0
+      ? String(m) + 'м'
+      : String(h) + 'ч' + (m <= 9 ? '0' + String(m) : String(m)) + 'м';
+  }
+
+  function likeMovieCatch() {
+    likeMovieClick(card);
+  }
+
   return (
     <section className='element'>
       <div className='element__frame'>
-        <img className='element__picture' src={card} alt='фильм' />
-        {/* <Preloader /> */}
+        <img
+          className='element__picture'
+          src={itSavedFilms ? card.image : MOMOREPARTIES + card.image.url}
+          alt={card.nameRU}
+        />
       </div>
       <div className='element__group'>
         <div className='element__bunch'>
-          <h3 className='element__caption'>Заголовок</h3>
-          <button type='button' className='element__circle'>
-            <div className='element__green' />
+          <h3 className='element__caption'>{card.nameRU}</h3>
+          <button
+            type='button'
+            className='element__circle'
+            onClick={likeMovieCatch}
+          >
+            <div
+              className={`element__green ${
+                isLiked
+                  ? 'element__green_mode_green'
+                  : 'element__green_mode_grey'
+              }`}
+            />
           </button>
         </div>
-        <span className='element__duration'>1ч42м</span>
+        <span className='element__duration'>{stringTime(card.duration)}</span>
       </div>
     </section>
   );
 };
 
-export default Card;
+export default React.memo(Card);

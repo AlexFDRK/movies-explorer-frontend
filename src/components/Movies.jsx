@@ -5,14 +5,35 @@ import Header from './Header';
 import Body from './Body';
 import Footer from './Footer';
 
-const Movies = ({ movies, click, makeTurnClick, findFilmSubmit }) => {
+const Movies = ({
+  click,
+  itSavedFilms,
+  localMovies,
+  savedMoviesId,
+  filterText,
+  moviesIsShort,
+  handleFilmSubmit,
+  showPreloader,
+  likeMovieClick,
+  connectError,
+}) => {
   return (
     <section className='movies'>
       <Header click={click} />
-      <Body movies={movies} makeTurnClick={makeTurnClick} findFilmSubmit={findFilmSubmit} />
+      <Body
+        itSavedFilms={itSavedFilms}
+        localMovies={localMovies}
+        savedMoviesId={savedMoviesId}
+        filterAppText={filterText}
+        moviesIsShort={moviesIsShort}
+        handleFilmSubmit={handleFilmSubmit}
+        showPreloader={showPreloader}
+        likeMovieClick={likeMovieClick}
+        connectError={connectError}
+      />
       <Footer />
     </section>
   );
 };
 
-export default Movies;
+export default React.memo(Movies);

@@ -4,6 +4,7 @@ import '../index.css';
 import logoPath from '../images/logo.svg';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import validateFunction from '../utils/validateFunction';
 
 const LogForm = ({
   caption,
@@ -11,30 +12,39 @@ const LogForm = ({
   btnText,
   children,
   onSubmit,
-  validateFunction,
+  setSubmitErrorText,
+  submitErrorText,
 }) => {
   const history = useHistory();
-  const [name, setName] = useState('');
-  const [email, setMail] = useState('');
-  const [password, setPassword] = useState('');
-  const [validateName, setValidateName] = useState(false);
-  const [validateEmail, setValidateEmail] = useState(false);
-  const [validatePassword, setValidatePassword] = useState(false);
   const [errorMsg, setErrorMessage] = useState('');
-
+  const [values, setValues] = React.useState({});
+  const [isValid, setIsValid] = React.useState({});
+  const [isFormValid, setIsFormValid] = React.useState(false);
   const areTwoFields = isItMissing === 'none' ? true : false;
 
+  const handleChange = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setValues({ ...values, [name]: value });
+    setIsValid({ ...isValid, [name]: validateFunction(target) });
+  };
   useEffect(() => {
+    setSubmitErrorText('');
+  }, [values]);
+
+  useEffect(() => {
+    setSubmitErrorText('');
     let errorFound = false;
     let count = 0;
     let tmpMessage = 'Ошибка формата в :';
 
-    if (!validateName && !areTwoFields) {
+    if (!isValid['name'] && !areTwoFields) {
       tmpMessage = tmpMessage + 'Имени';
       count++;
       errorFound = true;
     }
-    if (!validateEmail) {
+    if (!isValid['email']) {
       if (count > 0) {
         tmpMessage = tmpMessage + ',';
       }
@@ -42,7 +52,7 @@ const LogForm = ({
       count++;
       errorFound = true;
     }
-    if (!validatePassword) {
+    if (!isValid['password']) {
       if (count > 0) {
         tmpMessage = tmpMessage + ',';
       }
@@ -50,32 +60,14 @@ const LogForm = ({
       errorFound = true;
     }
 
-    if(errorFound){
+    if (errorFound) {
       setErrorMessage(tmpMessage);
-    }else{
-      setErrorMessage('');
-    }
-  }, [name, email, password]);
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-
-    if (areTwoFields) {
-      setValidateName(true);
+      setIsFormValid(false);
     } else {
-      setValidateName(validateFunction(e.target));
+      setErrorMessage('');
+      setIsFormValid(true);
     }
-  };
-
-  const handleEmailChange = (e) => {
-    setMail(e.target.value);
-    setValidateEmail(validateFunction(e.target));
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    setValidatePassword(validateFunction(e.target));
-  };
+  }, [values]);
 
   const handleLoginClick = () => {
     history.push('/');
@@ -84,14 +76,18 @@ const LogForm = ({
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (areTwoFields ? false : !name || !email || !password) {
+    const v = !name || !values['email'] || !values['password'];
+
+    if (
+      areTwoFields ? !values['email'] || !values['password'] : !values['name'] || !values['email'] || !values['password']
+    ) {
       return;
     }
 
     if (areTwoFields) {
-      onSubmit(email, password);
+      onSubmit(values['email'], values['password']);
     } else {
-      onSubmit(name, email, password);
+      onSubmit(values['name'], values['email'], values['password']);
     }
   }
 
@@ -112,13 +108,16 @@ const LogForm = ({
             <div className='text_tag login__tag'>Имя</div>
             <div className='login__cover'>
               <input
-                className={`text_password login__input ${!validateName?'color_red':''}`}
+                className={`text_password login__input ${
+                  !isValid['name'] ? 'color_red' : ''
+                }`}
                 placeholder='Имя'
                 type='string'
-                onChange={handleNameChange}
-                value={name || ''}
-                minLength = {2}
-                maxLength = {30}
+                name='name'
+                onChange={handleChange}
+                value={values['name'] || ''}
+                minLength={2}
+                maxLength={30}
               />
             </div>
           </div>
@@ -126,12 +125,15 @@ const LogForm = ({
             <div className='text_tag login__tag'>E-mail</div>
             <div className='login__cover'>
               <input
-                className={`text_password login__input ${!validateEmail?'color_red':''}`}
+                className={`text_password login__input ${
+                  !isValid['email'] ? 'color_red' : ''
+                }`}
                 required
                 placeholder='pochta@yandex.ru|'
                 type='email'
-                onChange={handleEmailChange}
-                value={email || ''}
+                name='email'
+                onChange={handleChange}
+                value={values['email'] || ''}
               />
             </div>
           </div>
@@ -143,20 +145,26 @@ const LogForm = ({
                 required
                 placeholder='**********'
                 type='password'
-                onChange={handlePasswordChange}
-                value={password || ''}
-                minLength = {2}
-                maxLength = {30}
+                name='password'
+                onChange={handleChange}
+                value={values['password'] || ''}
+                minLength={2}
+                maxLength={30}
               />
             </div>
             <div className='text_tag login__error color_red'>
-              {errorMsg}
+              {errorMsg === '' ? submitErrorText : errorMsg}
               {/* Что-то пошло не так... */}
             </div>
           </div>
         </div>
         <div className='login__bottom'>
-          <button type='submit' className='login__button'>
+          <button
+            type='submit'
+            className={`login__button ${
+              isFormValid ? '' : 'login__button_status_inactive'
+            }`}
+          >
             {btnText}
           </button>
           <div className='login__group'>{children}</div>

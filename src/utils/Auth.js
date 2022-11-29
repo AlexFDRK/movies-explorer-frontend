@@ -1,6 +1,5 @@
 import { API_URL } from '../utils/constants';
 
-
 export const register = (name, email, password) => {
   return fetch(`${API_URL}signup`, {
     method: 'POST',
