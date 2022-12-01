@@ -19,7 +19,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "deploy": "npm run build && scp -r ./build/* alexfdrk@178.154.223.99:/home/alexfdrk/movies-explorer"
   },
   "eslintConfig": {
     "extends": [

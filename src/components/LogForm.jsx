@@ -76,8 +76,6 @@ const LogForm = ({
   function handleSubmit(e) {
     e.preventDefault();
 
-    const v = !name || !values['email'] || !values['password'];
-
     if (
       areTwoFields ? !values['email'] || !values['password'] : !values['name'] || !values['email'] || !values['password']
     ) {

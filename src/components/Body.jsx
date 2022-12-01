@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import '../index.css';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Card from './Card';
@@ -23,14 +23,20 @@ const Body = ({
   const [filterText, setFilterText] = useState('');
   const [short, setShort] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
-  const [moviesTurn, setMoviesTurn] = useState(0);
+  // const [moviesTurn, setMoviesTurn] = useState(0);
+  const savedMoviesTurn = React.useRef(0);
   var btnVisible = false;
 
   const handleResize = React.useCallback(() => {
-    setTimeout(setSize(window.innerWidth), 1000);
+    setTimeout(setSize(window.innerWidth), 1000);moviesTurn
   }, [size]);
 
-  React.useEffect(() => {
+  useEffect(()=>{
+    console.log(moviesTurn);
+    console.log(savedMoviesTurn.current);
+  },[moviesTurn, savedMoviesTurn]);
+
+  useEffect(() => {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
@@ -71,8 +77,9 @@ const Body = ({
   }
 
   const makeTurnClick = React.useCallback(() => {
-    setMoviesTurn(moviesTurn + 1);
-  }, [moviesTurn]);
+    savedMoviesTurn.current += 1;
+    // setMoviesTurn(moviesTurn + 1);
+  }, [savedMoviesTurn]);
 
   const filteredArr = () => {
     let seqFilteredArray;
@@ -91,16 +98,16 @@ const Body = ({
 
     if (size >= 1280) {
       //12карт по 3 ряда по 4 + 4
-      seqFilteredArray = filteredArray.slice(0, 4 * 3 + 4 * moviesTurn);
+      seqFilteredArray = filteredArray.slice(0, 4 * 3 + 4 * savedMoviesTurn.current);
     } else if (size >= 993) {
       //12карт по 4 ряда по 3 в ряд + 3
-      seqFilteredArray = filteredArray.slice(0, 3 * 4 + 3 * moviesTurn);
+      seqFilteredArray = filteredArray.slice(0, 3 * 4 + 3 * savedMoviesTurn.current);
     } else if (size >= 757) {
       //8карт 4 ряда по 2 в ряд + 2
-      seqFilteredArray = filteredArray.slice(0, 2 * 4 + 2 * moviesTurn);
+      seqFilteredArray = filteredArray.slice(0, 2 * 4 + 2 * savedMoviesTurn.current);
     } else {
       //5 по 1 в ряд + 2
-      seqFilteredArray.slice(0, 1 * 5 + 2 * moviesTurn);
+      seqFilteredArray = filteredArray.slice(0, 1 * 5 + 2 * savedMoviesTurn.current);
     }
 
     btnVisible = (filteredArray.length !== seqFilteredArray.length);

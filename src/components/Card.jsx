@@ -2,14 +2,8 @@
 import '../index.css';
 import React from 'react';
 import { MOMOREPARTIES } from '../utils/constants';
-// import { useEffect } from 'react';
 
 const Card = ({ card, likeMovieClick, isLiked, itSavedFilms }) => {
-  // React.useEffect(() => {
-  //   console.log(itSaved);
-  //   console.log(card.id);
-  //   console.log(isLiked);
-  // }, []);
 
   function stringTime(duration) {
     const h = Math.floor(duration / 60);

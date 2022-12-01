@@ -208,11 +208,11 @@ function App({ ev }) {
     [savedMovies]
   );
 
-  function signOut() {
+  const signOut = useCallback(() => {
     setLoggedIn(false);
     localStorage.removeItem(TOKEN_KEY);
     history.push('/');
-  }
+  },[]);
 
   const WrappedProfile = function (props) {
     return <Profile {...props} click={clickBurger} handleExitClick={signOut} />;
