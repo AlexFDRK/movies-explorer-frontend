@@ -18,7 +18,6 @@ import MoviesApi from '../utils/MoviesApi';
 import MainApi from '../utils/MainApi';
 import { TOKEN_KEY, getToken, updateToken } from '../utils/token';
 import { MOMOREPARTIES } from '../utils/constants';
-// import MoviesMap from '../utils/MoviesMap';
 
 function App({ ev }) {
   const history = useHistory();
@@ -54,7 +53,6 @@ function App({ ev }) {
         setLocalMovies(moviesData);
       })
       .catch((err) => {
-        console.log(err);
         setConnectError(true);
         // showErrorMessage(err.message);
       })
@@ -164,7 +162,6 @@ function App({ ev }) {
           ? value.movieId === String(card.id)
           : value.movieId === String(card.movieId)
       );
-      console.log(theCardInArray);
       if (theCardInArray.length !== 0) {
         // Удаляем карточку из базы и массива
         MainApi.deleteMovie(theCardInArray[0]._id)
@@ -199,9 +196,6 @@ function App({ ev }) {
           })
           .catch((err) => {
             showErrorMessage(err.message);
-          })
-          .finally(() => {
-            // setShowLoadingDesc(false);
           });
       }
     },

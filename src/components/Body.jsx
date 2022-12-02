@@ -1,8 +1,7 @@
-/*eslint-disable*/
+///*eslint-disable*/
 import '../index.css';
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import Card from './Card';
 import findPic from '../images/find.svg';
@@ -19,22 +18,16 @@ const Body = ({
   likeMovieClick,
   connectError,
 }) => {
-  const location = useLocation();
   const [filterText, setFilterText] = useState('');
   const [short, setShort] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
-  // const [moviesTurn, setMoviesTurn] = useState(0);
-  const savedMoviesTurn = React.useRef(0);
+  const [moviesTurn, setMoviesTurn] = useState(0);
+  const savedMoviesTurn = useRef(0);
   var btnVisible = false;
 
-  const handleResize = React.useCallback(() => {
-    setTimeout(setSize(window.innerWidth), 1000);moviesTurn
+  const handleResize = useCallback(() => {
+    setTimeout(setSize(window.innerWidth), 1000);
   }, [size]);
-
-  useEffect(()=>{
-    console.log(moviesTurn);
-    console.log(savedMoviesTurn.current);
-  },[moviesTurn, savedMoviesTurn]);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -76,9 +69,9 @@ const Body = ({
     handleFilmSubmit(filterText, short);
   }
 
-  const makeTurnClick = React.useCallback(() => {
+  const makeTurnClick = useCallback(() => {
     savedMoviesTurn.current += 1;
-    // setMoviesTurn(moviesTurn + 1);
+    setMoviesTurn(moviesTurn + 1);
   }, [savedMoviesTurn]);
 
   const filteredArr = () => {
