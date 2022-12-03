@@ -73,8 +73,8 @@ const LogForm = ({
     history.push('/');
   };
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(evnt) {
+    evnt.preventDefault();
 
     if (
       areTwoFields ? !values['email'] || !values['password'] : !values['name'] || !values['email'] || !values['password']

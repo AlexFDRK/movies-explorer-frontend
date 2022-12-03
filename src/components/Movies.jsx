@@ -16,6 +16,8 @@ const Movies = ({
   showPreloader,
   likeMovieClick,
   connectError,
+  clickTurn,
+  turn,
 }) => {
   return (
     <section className='movies'>
@@ -30,6 +32,8 @@ const Movies = ({
         showPreloader={showPreloader}
         likeMovieClick={likeMovieClick}
         connectError={connectError}
+        clickTurn={clickTurn}
+        turn={turn}
       />
       <Footer />
     </section>

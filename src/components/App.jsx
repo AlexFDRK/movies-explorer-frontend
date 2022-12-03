@@ -33,6 +33,7 @@ function App({ ev }) {
   const [localMovies, setLocalMovies] = useState([]);
   const [showPreloader, setShowPreloader] = useState(false);
   const [connectError, setConnectError] = useState(false);
+  const turn = React.useRef(0);
 
   const clickBurger = () => {
     setSliderVisible(!sliderVisible);
@@ -41,6 +42,10 @@ function App({ ev }) {
   const handleSliderClick = () => {
     setSliderVisible(!sliderVisible);
   };
+
+  const clickTurn = () => {
+    turn.current++;
+  }
 
   useEffect(() => {
     setSavedMoviesId(savedMovies.map((mv) => Number(mv.movieId)));
@@ -151,7 +156,7 @@ function App({ ev }) {
         }
       })
       .catch((err) => {
-        setSubmitErrorText(`Ошибка подключения! ${err.message}`);
+        setSubmitErrorText(`Ошибка подключения!! ${err.message}`);
       });
   };
 
@@ -227,6 +232,8 @@ function App({ ev }) {
         showPreloader={showPreloader}
         likeMovieClick={likeMovieClick}
         connectError={connectError}
+        clickTurn={clickTurn}
+        turn={turn}
       />
     );
   };
@@ -246,6 +253,8 @@ function App({ ev }) {
         showPreloader={showPreloader}
         likeMovieClick={likeMovieClick}
         connectError={connectError}
+        clickTurn={clickTurn}
+        turn={turn}
       />
     );
   };

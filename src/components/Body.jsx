@@ -1,7 +1,7 @@
 ///*eslint-disable*/
 import '../index.css';
 import React from 'react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from './Card';
 import findPic from '../images/find.svg';
@@ -17,12 +17,13 @@ const Body = ({
   showPreloader,
   likeMovieClick,
   connectError,
+  clickTurn,
+  turn,
 }) => {
   const [filterText, setFilterText] = useState('');
   const [short, setShort] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
   const [moviesTurn, setMoviesTurn] = useState(0);
-  const savedMoviesTurn = useRef(0);
   var btnVisible = false;
 
   const handleResize = useCallback(() => {
@@ -70,9 +71,9 @@ const Body = ({
   }
 
   const makeTurnClick = useCallback(() => {
-    savedMoviesTurn.current += 1;
     setMoviesTurn(moviesTurn + 1);
-  }, [savedMoviesTurn]);
+    clickTurn();
+  }, [moviesTurn]);
 
   const filteredArr = () => {
     let seqFilteredArray;
@@ -91,19 +92,19 @@ const Body = ({
 
     if (size >= 1280) {
       //12карт по 3 ряда по 4 + 4
-      seqFilteredArray = filteredArray.slice(0, 4 * 3 + 4 * savedMoviesTurn.current);
+      seqFilteredArray = filteredArray.slice(0, 4 * 3 + 4 * Math.max(turn.current, moviesTurn));
     } else if (size >= 993) {
       //12карт по 4 ряда по 3 в ряд + 3
-      seqFilteredArray = filteredArray.slice(0, 3 * 4 + 3 * savedMoviesTurn.current);
+      seqFilteredArray = filteredArray.slice(0, 3 * 4 + 3 * Math.max(turn.current, moviesTurn));
     } else if (size >= 757) {
       //8карт 4 ряда по 2 в ряд + 2
-      seqFilteredArray = filteredArray.slice(0, 2 * 4 + 2 * savedMoviesTurn.current);
+      seqFilteredArray = filteredArray.slice(0, 2 * 4 + 2 * Math.max(turn.current, moviesTurn));
     } else {
       //5 по 1 в ряд + 2
-      seqFilteredArray = filteredArray.slice(0, 1 * 5 + 2 * savedMoviesTurn.current);
+      seqFilteredArray = filteredArray.slice(0, 1 * 5 + 2 * turn.current);
     }
 
-    btnVisible = (filteredArray.length !== seqFilteredArray.length);
+    btnVisible = filteredArray.length !== seqFilteredArray.length;
 
     return seqFilteredArray;
   };
