@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import '../index.css';
 import logoPath from '../images/logo.svg';
@@ -17,9 +16,9 @@ const LogForm = ({
 }) => {
   const history = useHistory();
   const [errorMsg, setErrorMessage] = useState('');
-  const [values, setValues] = React.useState({});
-  const [isValid, setIsValid] = React.useState({});
-  const [isFormValid, setIsFormValid] = React.useState(false);
+  const [values, setValues] = useState({});
+  const [isValid, setIsValid] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
   const areTwoFields = isItMissing === 'none' ? true : false;
 
   const handleChange = (event) => {
@@ -29,9 +28,6 @@ const LogForm = ({
     setValues({ ...values, [name]: value });
     setIsValid({ ...isValid, [name]: validateFunction(target) });
   };
-  useEffect(() => {
-    setSubmitErrorText('');
-  }, [values]);
 
   useEffect(() => {
     setSubmitErrorText('');

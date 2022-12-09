@@ -16,8 +16,9 @@ import ProtectedRoute from './ProtectedRoute';
 import * as auth from '../utils/Auth';
 import MoviesApi from '../utils/MoviesApi';
 import MainApi from '../utils/MainApi';
-import { TOKEN_KEY, getToken, updateToken } from '../utils/token';
-import { MOMOREPARTIES } from '../utils/constants';
+import { getToken, updateToken, removeToken } from '../utils/token';
+import { TOKEN_KEY, MOMOREPARTIES } from '../utils/constants';
+import { removeSearch, removeTurn } from '../utils/LastSearch';
 
 function App({ ev }) {
   const history = useHistory();
@@ -43,9 +44,9 @@ function App({ ev }) {
     setSliderVisible(!sliderVisible);
   };
 
-  const clickTurn = () => {
-    turn.current++;
-  }
+  const clickTurn = (value) => {
+    turn.current = value;
+  };
 
   useEffect(() => {
     setSavedMoviesId(savedMovies.map((mv) => Number(mv.movieId)));
@@ -88,8 +89,7 @@ function App({ ev }) {
       .then(([userData, savedMoviesData]) => {
         setCurrentUser(userData.data);
         setSavedMovies(savedMoviesData.data);
-        setLoggedIn(true);
-        history.push('/movies');
+        // history.push('/movies');
       })
       .catch((err) => {
         showErrorMessage(err.message);
@@ -107,13 +107,15 @@ function App({ ev }) {
     auth
       .getContent(token)
       .then((res) => {
-        if (res) {
+        if (res.message && res.message === 'Ошибочный токен') {
+          signOut();
+        } else {
+          setLoggedIn(true);
           getUserAndMovies(token);
         }
       })
-      .catch(() => {
-        //Вставить обработку ошибки!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return;
+      .catch((err) => {
+        alert(`Ошибка! ${err}`);
       });
   }, []);
 
@@ -121,13 +123,38 @@ function App({ ev }) {
     setError(message);
   }
 
+  const checkToken = (data) => {
+    if (!data.token) {
+      setLoggedIn(false);
+      setSubmitErrorText(
+        `Ошибка аутентификации! ${data.message ? data.message : ''}`
+      );
+    } else if (data) {
+      auth
+        .getContent(data.token)
+        .then((res) => {
+          if (res.message && res.message === 'Ошибочный токен') {
+            signOut();
+          } else {
+            setLoggedIn(true);
+            updateToken(data.token);
+            getUserAndMovies(data.token);
+            history.push('/movies');
+          }
+        })
+        .catch((err) => {
+          alert(`Ошибка! ${err}`);
+        });
+    }
+  };
+
   const handleRegisterSubmit = (name, email, password) => {
     setLoggedIn(false);
     auth
       .register(name, email, password)
       .then((res) => {
         if (!res.error && res.statusCode !== 400) {
-          history.push('/signin');
+          checkToken(res);
         } else {
           setLoggedIn(false);
           setError(`Ошибка! ${res.error ? res.error : ''}`);
@@ -142,18 +169,17 @@ function App({ ev }) {
     auth
       .authorize(email, password)
       .then((data) => {
-        if (!data.token) {
-          setLoggedIn(false);
-          setSubmitErrorText(
-            `Ошибка аутентификации! ${data.message ? data.message : ''}`
-          );
-        } else if (data) {
-          updateToken(data.token);
-          //          Оставлено для варианта с куками
-          //          document.cookie = `${TOKEN_KEY}=${data.token}; SameSite=None; Secure`;
-          //          Cookies.set(TOKEN_KEY, data.token);
-          getUserAndMovies(data.token);
-        }
+        checkToken(data);
+      })
+      .catch((err) => {
+        setSubmitErrorText(`Ошибка подключения!! ${err.message}`);
+      });
+  };
+
+  const changeProfileClick = (name, email) => {
+    MainApi.patchProfile({ email: email, name: name })
+      .then((userData) => {
+        setCurrentUser(userData.data);
       })
       .catch((err) => {
         setSubmitErrorText(`Ошибка подключения!! ${err.message}`);
@@ -208,13 +234,28 @@ function App({ ev }) {
   );
 
   const signOut = useCallback(() => {
+    setLocalMovies([]);
+    setSavedMovies([]);
+    setSavedMoviesId([]);
+    setFilterText('');
+    setMoviesIsShort(false);
+    removeSearch();
+    removeTurn();
     setLoggedIn(false);
     localStorage.removeItem(TOKEN_KEY);
     history.push('/');
-  },[]);
+  }, []);
 
   const WrappedProfile = function (props) {
-    return <Profile {...props} click={clickBurger} handleExitClick={signOut} />;
+    return (
+      <Profile
+        {...props}
+        click={clickBurger}
+        handleExitClick={signOut}
+        handleChangeClick={changeProfileClick}
+        submitErrorText={submitErrorText}
+      />
+    );
   };
 
   const WrappedMovies = function (props) {
@@ -234,6 +275,7 @@ function App({ ev }) {
         connectError={connectError}
         clickTurn={clickTurn}
         turn={turn}
+        cross={false}
       />
     );
   };
@@ -255,6 +297,7 @@ function App({ ev }) {
         connectError={connectError}
         clickTurn={clickTurn}
         turn={turn}
+        cross={true}
       />
     );
   };
@@ -265,7 +308,7 @@ function App({ ev }) {
         <div className='page'>
           <Switch>
             <Route exact path='/'>
-              <Promo />
+              <Promo loggedIn={loggedIn} click={clickBurger} />
             </Route>
             <Route path='/signin'>
               <Login
@@ -290,13 +333,13 @@ function App({ ev }) {
             />
             <ProtectedRoute
               loggedIn={loggedIn}
-              component={WrappedMovies}
-              path='/movies'
+              component={WrappedSavedMovies}
+              path='/saved-movies'
             />
             <ProtectedRoute
               loggedIn={loggedIn}
-              component={WrappedSavedMovies}
-              path='/saved-movies'
+              component={WrappedMovies}
+              path='/movies'
             />
             <Route path='/404'>
               <Page404 />

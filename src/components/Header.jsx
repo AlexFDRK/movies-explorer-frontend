@@ -6,7 +6,7 @@ import burgerPath from '../images/burger.svg';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Header = ({ isItHidden, click }) => {
+const Header = ({ isItHidden, click, dark }) => {
   const history = useHistory();
 
   const handleLoginClick = () => {
@@ -14,24 +14,39 @@ const Header = ({ isItHidden, click }) => {
   };
 
   const handleClick = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     click();
   };
 
   return (
-    <header className={`header ${isItHidden}`}>
-      <img className='header__logo' src={logoPath} onClick={handleLoginClick} alt='лого' />
+    <header
+      className={`header ${isItHidden} ${
+        dark ? 'header__type_dark' : 'header__type_light'
+      }`}
+    >
+      <img
+        className='header__logo'
+        src={logoPath}
+        onClick={handleLoginClick}
+        alt='лого'
+      />
       <div className='header__menu'>
         <nav className='header__navigation'>
-          <Link to='/movies' className='header__menu-text link color_black'>
+          <Link
+            to='/movies'
+            className={`header__menu-text link ${dark ? 'color_white' : 'color_black'}`}
+          >
             Фильмы
           </Link>
-          <Link to='/saved-movies' className='header__menu-text link color_black'>
+          <Link
+            to='/saved-movies'
+            className={`header__menu-text link ${dark ? 'color_white' : 'color_black'}`}
+          >
             Сохранённые фильмы
           </Link>
         </nav>
         <nav className='header__account'>
-          <Link to='/profile' className='header__menu-text link color_black'>
+          <Link to='/profile' className={`header__menu-text link ${dark ? 'color_white' : 'color_black'}`}>
             Аккаунт
           </Link>
           <button className='header__button'>

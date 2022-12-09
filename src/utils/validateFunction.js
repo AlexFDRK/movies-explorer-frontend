@@ -1,7 +1,5 @@
+import {EMAIL_REGEXP} from './constants'
 const validateFunction = (target) => {
-    const EMAIL_REGEXP =
-      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-
     if (target === '' || target === null || target.length === 0) {
       return false;
     }

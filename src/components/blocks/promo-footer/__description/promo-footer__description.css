@@ -9,14 +9,14 @@
 
 @media screen and (max-width: 800px) {
   .promo-footer__description {
-    margin: -5px;
+    /* margin: -5px; */
     font-size: 13px;
     line-height: 15.75px;
   }
 }
 
-@media screen and (max-width: 400px) {
+/* @media screen and (max-width: 400px) {
   .promo-footer__description {
     margin: 0px;
   }
-}
+} */

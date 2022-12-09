@@ -19,7 +19,7 @@ export const register = (name, email, password) => {
     .catch((err) => console.log(err));
 };
 
-export const authorize = (email, password ) => {
+export const authorize = (email, password) => {
   return fetch(`${API_URL}signin`, {
     method: 'POST',
     headers: {

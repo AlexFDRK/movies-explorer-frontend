@@ -1,14 +1,15 @@
 import '../index.css';
 import React from 'react';
 
+import Header from './Header';
 import BunnerHead from './BunnerHead';
 import BunnerMain from './BunnerMain';
 import Footer from './Footer';
 
-const Promo = () => {
+const Promo = ({ loggedIn, click }) => {
   return (
     <div className='banner'>
-      <BunnerHead />
+      {loggedIn ? <Header click={click} dark={true} /> : <BunnerHead />}
       <BunnerMain />
       <Footer />
     </div>

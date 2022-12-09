@@ -18,6 +18,7 @@ const Movies = ({
   connectError,
   clickTurn,
   turn,
+  cross,
 }) => {
   return (
     <section className='movies'>
@@ -34,6 +35,7 @@ const Movies = ({
         connectError={connectError}
         clickTurn={clickTurn}
         turn={turn}
+        cross={cross}
       />
       <Footer />
     </section>

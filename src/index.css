@@ -29,6 +29,8 @@
 @import url(../src/components/blocks/header/__pic/header__pic.css);
 @import url(../src/components/blocks/header/__burger/header__burger.css);
 @import url(../src/components/blocks/header/__caption/header__caption.css);
+@import url(../src/components/blocks/header/__type/header__type_dark.css);
+@import url(../src/components/blocks/header/__type/header__type_light.css);
 
 @import url(../src/components/blocks/banner/banner.css);
 @import url(../src/components/blocks/banner/__header/banner__header.css);
@@ -117,6 +119,7 @@
 @import url(../src/components/blocks/profile/__line/profile__line.css);
 @import url(../src/components/blocks/profile/__link/profile__link.css);
 @import url(../src/components/blocks/profile/__field/profile__field.css);
+@import url(../src/components/blocks/profile/__field/mode/profile__field_editable.css);
 
 @import url(../src/components/blocks/movies/__body/movies__body.css);
 @import url(../src/components/blocks/movies/__short/movies__short.css);
@@ -142,6 +145,7 @@
 @import url(../src/components/blocks/element/__green/element__green.css);
 @import url(../src/components/blocks/element/__green/_mode/element__green_mode_green.css);
 @import url(../src/components/blocks/element/__green/_mode/element__green_mode_grey.css);
+@import url(../src/components/blocks/element/__cross/element__cross.css);
 @import url(../src/components/blocks/element/__caption/element__caption);
 @import url(../src/components/blocks/element/__bunch/element__bunch.css);
 @import url(../src/components/blocks/element/__duration/element__duration.css);

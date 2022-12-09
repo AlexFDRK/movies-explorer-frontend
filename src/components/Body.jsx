@@ -1,4 +1,4 @@
-///*eslint-disable*/
+/*eslint-disable*/
 import '../index.css';
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
@@ -6,6 +6,12 @@ import { useState, useEffect, useCallback } from 'react';
 import Card from './Card';
 import findPic from '../images/find.svg';
 import Preloader from './Preloader';
+import {
+  updateSearch,
+  getSearch,
+  updateTurn,
+  getTurn,
+} from '../utils/LastSearch';
 
 const Body = ({
   itSavedFilms,
@@ -19,12 +25,33 @@ const Body = ({
   connectError,
   clickTurn,
   turn,
+  cross,
 }) => {
   const [filterText, setFilterText] = useState('');
   const [short, setShort] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
   const [moviesTurn, setMoviesTurn] = useState(0);
   var btnVisible = false;
+
+  useEffect(() => {
+    if (itSavedFilms && filterAppText !== '') {
+      setFilterText('');
+      setShort(false);
+    }
+    if (!itSavedFilms && filterAppText === '') {
+      const oldSearch = JSON.parse(getSearch());
+      const oldTurn = getTurn();
+      if (oldSearch !== null) {
+        const oldFilterTextValue =
+          oldSearch.filterText === null ? '' : oldSearch.filterText;
+        const oldShortTextValue =
+          oldSearch.short === null ? false : oldSearch.short;
+        const oldMoviesTurn = oldTurn === null ? 0 : Number(oldTurn);
+        turn.current = oldMoviesTurn;
+        handleFilmSubmit(oldFilterTextValue, oldShortTextValue);
+      }
+    }
+  }, []);
 
   const handleResize = useCallback(() => {
     setTimeout(setSize(window.innerWidth), 1000);
@@ -37,19 +64,15 @@ const Body = ({
   }, [size]);
 
   useEffect(() => {
-    if (filterAppText !== '') {
-      setFilterText('');
-    }
-  }, []);
-
-  useEffect(() => {
     if (!itSavedFilms) {
       setFilterText(filterAppText);
     }
   }, [filterAppText]);
 
   useEffect(() => {
-    setShort(moviesIsShort);
+    if (!itSavedFilms){
+      setShort(moviesIsShort);
+    }
   }, [moviesIsShort]);
 
   const clickShort = () => {
@@ -67,12 +90,22 @@ const Body = ({
       return;
     }
 
+    turn.current = 0;
+    updateSearch(
+      JSON.stringify({
+        filterText: filterText,
+        short: short,
+      })
+    );
+
     handleFilmSubmit(filterText, short);
   }
 
   const makeTurnClick = useCallback(() => {
-    setMoviesTurn(moviesTurn + 1);
-    clickTurn();
+    const newTurn = moviesTurn + 1;
+    setMoviesTurn(newTurn);
+    clickTurn(newTurn);
+    updateTurn(newTurn);
   }, [moviesTurn]);
 
   const filteredArr = () => {
@@ -92,13 +125,22 @@ const Body = ({
 
     if (size >= 1280) {
       //12карт по 3 ряда по 4 + 4
-      seqFilteredArray = filteredArray.slice(0, 4 * 3 + 4 * Math.max(turn.current, moviesTurn));
+      seqFilteredArray = filteredArray.slice(
+        0,
+        4 * 3 + 4 * Math.max(turn.current, moviesTurn)
+      );
     } else if (size >= 993) {
       //12карт по 4 ряда по 3 в ряд + 3
-      seqFilteredArray = filteredArray.slice(0, 3 * 4 + 3 * Math.max(turn.current, moviesTurn));
+      seqFilteredArray = filteredArray.slice(
+        0,
+        3 * 4 + 3 * Math.max(turn.current, moviesTurn)
+      );
     } else if (size >= 757) {
       //8карт 4 ряда по 2 в ряд + 2
-      seqFilteredArray = filteredArray.slice(0, 2 * 4 + 2 * Math.max(turn.current, moviesTurn));
+      seqFilteredArray = filteredArray.slice(
+        0,
+        2 * 4 + 2 * Math.max(turn.current, moviesTurn)
+      );
     } else {
       //5 по 1 в ряд + 2
       seqFilteredArray = filteredArray.slice(0, 1 * 5 + 2 * turn.current);
@@ -157,6 +199,7 @@ const Body = ({
             {filteredArr().map((item) => (
               <Card
                 card={item}
+                cross={cross}
                 itSavedFilms={itSavedFilms}
                 key={itSavedFilms ? Number(item.movieId) : item.id}
                 likeMovieClick={likeMovieClick}
