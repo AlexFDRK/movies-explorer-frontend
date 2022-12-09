@@ -39,10 +39,10 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
   };
 
   const handleEditClick = () => {
-    if (editable && checkChanges()) {
+    if (checkChanges()) {
       handleChangeClick(values['name'], values['email']);
     }
-    setEditable(!editable);
+    setEditable(false);
   };
 
   const handleChange = (event) => {
@@ -78,6 +78,12 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
     } else {
       setErrorMessage('');
     }
+
+    if (checkChanges()){
+      setEditable(true); 
+    }else{
+      setEditable(false); 
+    }
   }, [values]);
 
   return (
@@ -89,12 +95,8 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
         <div className='profile__group'>
           <span className='profile__text'>Имя</span>
           <input
-            className={`profile__text profile__field ${
-              editable ? 'profile__field_editable' : ''
-            }`}
+            className='profile__text profile__field'
             value={values['name'] || ''}
-            // value={currentUser.name || ''}
-            readOnly={editable ? '' : 'readonly'}
             name='name'
             type='string'
             minLength={2}
@@ -106,12 +108,8 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
         <div className='profile__group'>
           <span className='profile__text'>E-mail</span>
           <input
-            className={`profile__text profile__field ${
-              editable ? 'profile__field_editable' : ''
-            }`}
+            className='profile__text profile__field'
             value={values['email'] || ''}
-            // value={currentUser.email || ''}
-            readOnly={editable ? '' : 'readonly'}
             name='email'
             type='email'
             onChange={handleChange}
@@ -123,7 +121,7 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
         </div>
       </div>
       <div className='profile__footer'>
-        <div className='link profile__link' onClick={handleEditClick}>
+        <div className={`link profile__link ${editable ? '' : 'profile__link_mode_inactive'}`} onClick={handleEditClick} >
           {editable ? 'Сохранить' : 'Редактировать'}
         </div>
         <div className='link profile__link color_red' onClick={handleExitClick}>

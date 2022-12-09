@@ -118,6 +118,7 @@
 @import url(../src/components/blocks/profile/__text/profile__text.css);
 @import url(../src/components/blocks/profile/__line/profile__line.css);
 @import url(../src/components/blocks/profile/__link/profile__link.css);
+@import url(../src/components/blocks/profile/__link/_mode/profile__link_mode_inactive.css);
 @import url(../src/components/blocks/profile/__field/profile__field.css);
 @import url(../src/components/blocks/profile/__field/mode/profile__field_editable.css);
 
