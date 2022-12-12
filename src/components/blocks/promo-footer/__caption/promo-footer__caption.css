@@ -1,0 +1,18 @@
+.promo-footer__caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0px;
+}
+
+@media screen and (max-width: 767px) {
+  .promo-footer__caption {
+    flex-direction: column-reverse;
+    margin-top: 52px;
+    row-gap: 30px;
+    align-items: center;
+  }
+}

@@ -1,0 +1,11 @@
+.student__line {
+  margin: 10px 0 20px 0;
+  color: #e6e6e6;
+  flex-basis: 100%;
+}
+
+@media screen and (max-width: 400px) {
+  .student__line {
+    margin-top: 18px;
+  }
+}

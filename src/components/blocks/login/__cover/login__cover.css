@@ -1,0 +1,12 @@
+.login__cover{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    background-color: #F9F9F9;
+    width:100%;
+    height:46px;
+    border-width: 0px;
+    border-color: #F9F9F9;
+    border-style: solid;
+    border-radius: 8px;
+}

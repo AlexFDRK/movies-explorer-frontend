@@ -1,0 +1,28 @@
+.movies__group {
+  margin: 32px 0 47px 0;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+}
+
+@media screen and (max-width: 800px) {
+  .movies__group {
+    flex-direction: row-reverse;
+    justify-content: right;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .movies__group {
+    margin-top: 40px;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    justify-content: center;
+  }
+}

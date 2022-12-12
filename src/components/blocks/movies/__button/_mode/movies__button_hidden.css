@@ -1,0 +1,16 @@
+.movies__button_hidden {
+  visibility: hidden;
+  height: 0;
+}
+
+@media screen and (max-width: 800px) {
+  .movies__button_hidden {
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .movies__button_hidden {
+    height: 9px;
+  }
+}

@@ -1,0 +1,10 @@
+.student__photo {
+  /* height: auto;
+  width: 350px;
+  margin-top: -15px;
+  margin-left: -25px; */
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
