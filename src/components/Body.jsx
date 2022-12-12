@@ -1,4 +1,4 @@
-/*eslint-disable*/
+///*eslint-disable*/
 import '../index.css';
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
@@ -6,12 +6,16 @@ import { useState, useEffect, useCallback } from 'react';
 import Card from './Card';
 import findPic from '../images/find.svg';
 import Preloader from './Preloader';
+import { updateSearch, getSearch, updateTurn } from '../utils/LastSearch';
 import {
-  updateSearch,
-  getSearch,
-  updateTurn,
-  getTurn,
-} from '../utils/LastSearch';
+  SHORT_FILM_DURSTION,
+  TWELVE_FILMS_ON_SCREEN,
+  EIGHT_FILMS_ON_SCREEN,
+  FIVE_FILMS_ON_SCREEN,
+  ADD_FOUR_FILMS,
+  ADD_THREE_FILMS,
+  ADD_TWO_FILMS,
+} from '../utils/constants';
 
 const Body = ({
   itSavedFilms,
@@ -31,6 +35,11 @@ const Body = ({
   const [short, setShort] = useState(false);
   const [size, setSize] = useState(window.innerWidth);
   const [moviesTurn, setMoviesTurn] = useState(0);
+  const [searchData, setSearchData] = useState({
+    ['filterText']: '',
+    ['short']: false,
+    ['moviesTurn']: 0,
+  });
   var btnVisible = false;
 
   useEffect(() => {
@@ -40,14 +49,12 @@ const Body = ({
     }
     if (!itSavedFilms && filterAppText === '') {
       const oldSearch = JSON.parse(getSearch());
-      const oldTurn = getTurn();
       if (oldSearch !== null) {
         const oldFilterTextValue =
           oldSearch.filterText === null ? '' : oldSearch.filterText;
         const oldShortTextValue =
           oldSearch.short === null ? false : oldSearch.short;
-        const oldMoviesTurn = oldTurn === null ? 0 : Number(oldTurn);
-        turn.current = oldMoviesTurn;
+        turn.current = 0;
         handleFilmSubmit(oldFilterTextValue, oldShortTextValue);
       }
     }
@@ -70,7 +77,7 @@ const Body = ({
   }, [filterAppText]);
 
   useEffect(() => {
-    if (!itSavedFilms){
+    if (!itSavedFilms) {
       setShort(moviesIsShort);
     }
   }, [moviesIsShort]);
@@ -86,19 +93,27 @@ const Body = ({
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (!filterText) {
+    if (!itSavedFilms && !filterText) {
       return;
     }
 
-    turn.current = 0;
-    updateSearch(
-      JSON.stringify({
-        filterText: filterText,
-        short: short,
-      })
-    );
+    if (itSavedFilms) {
+      setSearchData({
+        ['filterText']: filterText,
+        ['short']: short,
+        ['moviesTurn']: moviesTurn,
+      });
+    } else {
+      turn.current = 0;
+      updateSearch(
+        JSON.stringify({
+          filterText: filterText,
+          short: short,
+        })
+      );
 
-    handleFilmSubmit(filterText, short);
+      handleFilmSubmit(filterText, short);
+    }
   }
 
   const makeTurnClick = useCallback(() => {
@@ -111,39 +126,48 @@ const Body = ({
   const filteredArr = () => {
     let seqFilteredArray;
 
+    if (itSavedFilms && searchData['filterText'] === '') {
+      seqFilteredArray = searchData['short']
+        ? localMovies.filter((value) => value.duration < SHORT_FILM_DURSTION)
+        : localMovies;
+      return seqFilteredArray;
+    }
+
     const filteredArray = itSavedFilms
       ? localMovies.filter(
           (value) =>
-            value.nameRU.toLowerCase().includes(filterText.toLowerCase()) &&
-            (short ? value.duration < 40 : true)
+            value.nameRU
+              .toLowerCase()
+              .includes(searchData['filterText'].toLowerCase()) &&
+            (searchData['short'] ? value.duration < SHORT_FILM_DURSTION : true)
         )
       : localMovies.filter(
           (value) =>
             value.nameRU.toLowerCase().includes(filterAppText.toLowerCase()) &&
-            (moviesIsShort ? value.duration < 40 : true)
+            (moviesIsShort ? value.duration < SHORT_FILM_DURSTION : true)
         );
 
     if (size >= 1280) {
       //12карт по 3 ряда по 4 + 4
       seqFilteredArray = filteredArray.slice(
         0,
-        4 * 3 + 4 * Math.max(turn.current, moviesTurn)
+        TWELVE_FILMS_ON_SCREEN + ADD_FOUR_FILMS * Math.max(turn.current, moviesTurn)
       );
     } else if (size >= 993) {
       //12карт по 4 ряда по 3 в ряд + 3
       seqFilteredArray = filteredArray.slice(
         0,
-        3 * 4 + 3 * Math.max(turn.current, moviesTurn)
+        TWELVE_FILMS_ON_SCREEN + ADD_THREE_FILMS * Math.max(turn.current, moviesTurn)
       );
     } else if (size >= 757) {
       //8карт 4 ряда по 2 в ряд + 2
       seqFilteredArray = filteredArray.slice(
         0,
-        2 * 4 + 2 * Math.max(turn.current, moviesTurn)
+        EIGHT_FILMS_ON_SCREEN + ADD_TWO_FILMS * Math.max(turn.current, moviesTurn)
       );
     } else {
       //5 по 1 в ряд + 2
-      seqFilteredArray = filteredArray.slice(0, 1 * 5 + 2 * turn.current);
+      seqFilteredArray = filteredArray.slice(0, FIVE_FILMS_ON_SCREEN + ADD_TWO_FILMS * turn.current);
     }
 
     btnVisible = filteredArray.length !== seqFilteredArray.length;
@@ -156,8 +180,8 @@ const Body = ({
       <form className='movies__top' onSubmit={handleSubmit}>
         <input
           className='movies__title'
-          required
           placeholder='Фильм'
+          required={itSavedFilms ? false : true}
           value={filterText || ''}
           type='string'
           onChange={handleFilmChange}

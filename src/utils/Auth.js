@@ -49,5 +49,5 @@ export const getContent = (token) => {
       'Access-Control-Allow-Credentials': true,
       Authorization: `Bearer ${token}`,
     },
-  }).then((res) => res.json());
+  }).then((res) => res);
 };

@@ -160,3 +160,14 @@
 @import url(../src/components/blocks/color/color_red.css);
 @import url(../src/components/blocks/color/color_black.css);
 @import url(../src/components/blocks/color/color_white.css);
+
+@import url(../src/components/blocks/popup/popup.css);
+@import url(../src/components/blocks/popup/__overlay/popup__overlay.css);
+@import url(../src/components/blocks/popup/__close/popup__close.css);
+@import url(../src/components/blocks/popup/_status/popup_status_opened.css);
+@import url(../src/components/blocks/form/form.css);
+@import url(../src/components/blocks/form/__title/form__title.css);
+@import url(../src/components/blocks/form/__title/_type/form__title_type_dark.css);
+@import url(../src/components/blocks/form/__title/_type/form__title_type_info.css);
+@import url(../src/components/blocks/form/__pictogramm/form__pictogram.css);
+@import url(../src/components/blocks/form/__info/form__info.css);

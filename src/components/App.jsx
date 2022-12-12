@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
@@ -11,18 +10,23 @@ import Register from './Register';
 import Profile from './Profile';
 import Movies from './Movies';
 import Page404 from './Page404';
+import ProtectedLog from './ProtectedLog';
 import ProtectedRoute from './ProtectedRoute';
+import PopupWithInfo from './PopupWithInfo';
 
 import * as auth from '../utils/Auth';
 import MoviesApi from '../utils/MoviesApi';
 import MainApi from '../utils/MainApi';
-import { getToken, updateToken, removeToken } from '../utils/token';
-import { TOKEN_KEY, MOMOREPARTIES } from '../utils/constants';
+import { getToken, updateToken } from '../utils/token';
+import {
+  TOKEN_KEY,
+  MOMOREPARTIES,
+  WRONG_TOKEN_ERROR,
+} from '../utils/constants';
 import { removeSearch, removeTurn } from '../utils/LastSearch';
 
-function App({ ev }) {
+function App() {
   const history = useHistory();
-  const [error, setError] = useState('');
   const [sliderVisible, setSliderVisible] = useState(false);
   const [savedMovies, setSavedMovies] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
@@ -34,6 +38,10 @@ function App({ ev }) {
   const [localMovies, setLocalMovies] = useState([]);
   const [showPreloader, setShowPreloader] = useState(false);
   const [connectError, setConnectError] = useState(false);
+  const [misfortuneVisible, setMisfortuneVisible] = useState(false);
+  const [itPositive, setItPositive] = useState(false);
+  const [errorDescription, setErrorDescription] = useState('');
+
   const turn = React.useRef(0);
 
   const clickBurger = () => {
@@ -58,9 +66,8 @@ function App({ ev }) {
         setConnectError(false);
         setLocalMovies(moviesData);
       })
-      .catch((err) => {
+      .catch(() => {
         setConnectError(true);
-        // showErrorMessage(err.message);
       })
       .finally(() => {
         setShowPreloader(false);
@@ -89,9 +96,11 @@ function App({ ev }) {
       .then(([userData, savedMoviesData]) => {
         setCurrentUser(userData.data);
         setSavedMovies(savedMoviesData.data);
-        // history.push('/movies');
       })
       .catch((err) => {
+        if (err.status === WRONG_TOKEN_ERROR) {
+          signOut();
+        }
         showErrorMessage(err.message);
       });
   };
@@ -100,14 +109,13 @@ function App({ ev }) {
     const token = getToken();
 
     if (!token) {
-      history.push('/');
       return;
     }
 
     auth
       .getContent(token)
       .then((res) => {
-        if (res.message && res.message === 'Ошибочный токен') {
+        if (res.status === WRONG_TOKEN_ERROR) {
           signOut();
         } else {
           setLoggedIn(true);
@@ -115,13 +123,9 @@ function App({ ev }) {
         }
       })
       .catch((err) => {
-        alert(`Ошибка! ${err}`);
+        showErrorMessage(err);
       });
   }, []);
-
-  function showErrorMessage(message) {
-    setError(message);
-  }
 
   const checkToken = (data) => {
     if (!data.token) {
@@ -133,7 +137,7 @@ function App({ ev }) {
       auth
         .getContent(data.token)
         .then((res) => {
-          if (res.message && res.message === 'Ошибочный токен') {
+          if (res.status === WRONG_TOKEN_ERROR) {
             signOut();
           } else {
             setLoggedIn(true);
@@ -143,13 +147,13 @@ function App({ ev }) {
           }
         })
         .catch((err) => {
-          alert(`Ошибка! ${err}`);
+          showErrorMessage(err);
         });
     }
   };
 
   const handleRegisterSubmit = (name, email, password) => {
-    setLoggedIn(false);
+    signOut();
     auth
       .register(name, email, password)
       .then((res) => {
@@ -157,15 +161,16 @@ function App({ ev }) {
           checkToken(res);
         } else {
           setLoggedIn(false);
-          setError(`Ошибка! ${res.error ? res.error : ''}`);
+          setSubmitErrorText(`Ошибка! ${res.error ? res.error : ''}`);
         }
       })
       .catch((err) => {
-        alert(err);
+        setSubmitErrorText(err);
       });
   };
 
   const handleLoginSubmit = (email, password) => {
+    signOut();
     auth
       .authorize(email, password)
       .then((data) => {
@@ -180,8 +185,12 @@ function App({ ev }) {
     MainApi.patchProfile({ email: email, name: name })
       .then((userData) => {
         setCurrentUser(userData.data);
+        setSubmitErrorText('Данные изменены!');
       })
       .catch((err) => {
+        if (err.status === WRONG_TOKEN_ERROR) {
+          signOut();
+        }
         setSubmitErrorText(`Ошибка подключения!! ${err.message}`);
       });
   };
@@ -204,8 +213,10 @@ function App({ ev }) {
             });
           })
           .catch((err) => {
-            setError(`Ошибка! ${err}`);
-            // setMisfortuneVisible(true);
+            if (err.status === WRONG_TOKEN_ERROR) {
+              signOut();
+            }
+            showErrorMessage(err.message);
           });
       } else {
         // Добавляем карточку в базу и в массив
@@ -226,12 +237,26 @@ function App({ ev }) {
             setSavedMovies([...savedMovies, newMovie.data]);
           })
           .catch((err) => {
+            if (err.status === WRONG_TOKEN_ERROR) {
+              signOut();
+            }
             showErrorMessage(err.message);
           });
       }
     },
     [savedMovies]
   );
+
+  function showErrorMessage(message) {
+    setMisfortuneVisible(true);
+    setItPositive(false);
+    setErrorDescription(`Ошибка: ${message}`);
+  }
+
+  const closeAllPopups = () => {
+    setMisfortuneVisible(false);
+    setErrorDescription('');
+  };
 
   const signOut = useCallback(() => {
     setLocalMovies([]);
@@ -243,7 +268,6 @@ function App({ ev }) {
     removeTurn();
     setLoggedIn(false);
     localStorage.removeItem(TOKEN_KEY);
-    history.push('/');
   }, []);
 
   const WrappedProfile = function (props) {
@@ -253,6 +277,7 @@ function App({ ev }) {
         click={clickBurger}
         handleExitClick={signOut}
         handleChangeClick={changeProfileClick}
+        setSubmitErrorText={setSubmitErrorText}
         submitErrorText={submitErrorText}
       />
     );
@@ -302,6 +327,28 @@ function App({ ev }) {
     );
   };
 
+  const WrappedLogin = function (props) {
+    return (
+      <Login
+        {...props}
+        setSubmitErrorText={setSubmitErrorText}
+        submitErrorText={submitErrorText}
+        onSubmit={handleLoginSubmit}
+      />
+    );
+  };
+
+  const WrappedLogup = function (props) {
+    return (
+      <Register
+        {...props}
+        setSubmitErrorText={setSubmitErrorText}
+        submitErrorText={submitErrorText}
+        onSubmit={handleRegisterSubmit}
+      />
+    );
+  };
+
   return (
     <CurrentUserContext.Provider value={{ currentUser: currentUser }}>
       <div className='App'>
@@ -310,22 +357,8 @@ function App({ ev }) {
             <Route exact path='/'>
               <Promo loggedIn={loggedIn} click={clickBurger} />
             </Route>
-            <Route path='/signin'>
-              <Login
-                onSubmit={handleLoginSubmit}
-                setSubmitErrorText={setSubmitErrorText}
-                submitErrorText={submitErrorText}
-                error={error}
-              />
-            </Route>
-            <Route path='/signup'>
-              <Register
-                onSubmit={handleRegisterSubmit}
-                setSubmitErrorText={setSubmitErrorText}
-                submitErrorText={submitErrorText}
-                error={error}
-              />
-            </Route>
+            <ProtectedLog component={WrappedLogin} path='/signin' />
+            <ProtectedLog component={WrappedLogup} path='/signup' />
             <ProtectedRoute
               loggedIn={loggedIn}
               component={WrappedProfile}
@@ -351,6 +384,13 @@ function App({ ev }) {
           <Slide
             isSliderVisible={sliderVisible}
             clickSlider={handleSliderClick}
+          />
+          <PopupWithInfo
+            name='info'
+            isOpen={misfortuneVisible}
+            onClose={closeAllPopups}
+            isItPositive={itPositive}
+            errorDescription={errorDescription}
           />
         </div>
       </div>

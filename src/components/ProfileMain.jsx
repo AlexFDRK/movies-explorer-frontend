@@ -5,7 +5,12 @@ import { useContext, useEffect, useState } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import validateFunction from '../utils/validateFunction';
 
-const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) => {
+const ProfileMain = ({
+  handleExitClick,
+  handleChangeClick,
+  submitErrorText,
+  setSubmitErrorText,
+}) => {
   const currentContextData = useContext(CurrentUserContext);
   const currentUser = currentContextData.currentUser;
   const [editable, setEditable] = useState(false);
@@ -22,8 +27,17 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
       ['name']: true,
       ['email']: true,
     });
-    console.log(submitErrorText);
   }, []);
+
+  useEffect(() => {
+    if (submitErrorText !== '') {
+      setTimeout(clearErrorText, 10000);
+    }
+  }, [submitErrorText]);
+
+  const clearErrorText = () => {
+    setSubmitErrorText('');
+  };
 
   const checkChanges = () => {
     if (
@@ -46,6 +60,7 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
   };
 
   const handleChange = (event) => {
+    setSubmitErrorText('');
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -79,10 +94,10 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
       setErrorMessage('');
     }
 
-    if (checkChanges()){
-      setEditable(true); 
-    }else{
-      setEditable(false); 
+    if (checkChanges()) {
+      setEditable(true);
+    } else {
+      setEditable(false);
     }
   }, [values]);
 
@@ -116,12 +131,19 @@ const ProfileMain = ({ handleExitClick, handleChangeClick, submitErrorText }) =>
           />
         </div>
         <div className='text_tag login__error color_red'>
-          {errorMsg === '' ? '' : errorMsg}
+          {errorMsg === '' && submitErrorText === ''
+            ? ''
+            : errorMsg + submitErrorText}
           {/* Что-то пошло не так... */}
         </div>
       </div>
       <div className='profile__footer'>
-        <div className={`link profile__link ${editable ? '' : 'profile__link_mode_inactive'}`} onClick={handleEditClick} >
+        <div
+          className={`link profile__link ${
+            editable ? '' : 'profile__link_mode_inactive'
+          }`}
+          onClick={handleEditClick}
+        >
           {editable ? 'Сохранить' : 'Редактировать'}
         </div>
         <div className='link profile__link color_red' onClick={handleExitClick}>

@@ -4,7 +4,7 @@ import React from 'react';
 import Header from '../components/Header';
 import ProfileMain from '../components/ProfileMain';
 
-const Profile = ({ handleExitClick, click, handleChangeClick, submitErrorText }) => {
+const Profile = ({ handleExitClick, click, handleChangeClick, submitErrorText, setSubmitErrorText }) => {
   return (
     <div>
       <Header click={click} />
@@ -12,6 +12,7 @@ const Profile = ({ handleExitClick, click, handleChangeClick, submitErrorText })
         handleExitClick={handleExitClick}
         handleChangeClick={handleChangeClick}
         submitErrorText={submitErrorText}
+        setSubmitErrorText={setSubmitErrorText}
       />
     </div>
   );
